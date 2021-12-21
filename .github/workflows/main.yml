@@ -3,7 +3,7 @@ name: Build LaTeX document
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
-  push:
+  pull_request:
     branches: [ main ]
     
 jobs:
@@ -21,9 +21,17 @@ jobs:
           name: PDF
           path: main.pdf
       - name: Copy PDF document
-        run: mkdir docs && cp *.pdf docs/
+        run: mkdir released_paper && cp *.pdf released_paper/
       - name: Deploy pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs
+          publish_dir: ./released_paper
+      - name: Commit changed files
+        uses: stefanzweifel/git-auto-commit-action@v2.3.0
+        with:
+          commit_message: Release a paper
+          branch: ${{ github.head_ref }}
+          file_pattern: ./released_paper/main.pdf
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
