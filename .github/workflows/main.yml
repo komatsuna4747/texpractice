@@ -28,10 +28,10 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./released_paper
       - name: Commit changed files
-        uses: stefanzweifel/git-auto-commit-action@v2.3.0
+        uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Release a paper
           branch: ${{ github.head_ref }}
-          file_pattern: ./released_paper/main.pdf
+          file_pattern: released_paper/main.pdf
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
