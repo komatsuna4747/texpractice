@@ -22,6 +22,14 @@ jobs:
         with:
           name: PDF
           path: main.pdf
+      - name: Compile LaTeX beamer document
+        uses: xu-cheng/latex-action@v2
+        with:
+          root_file: slide.tex
+      - uses: actions/upload-artifact@v2
+        with:
+          name: PDF
+          path: slide.pdf
       - name: Copy PDF document
         run: mkdir released_paper && cp *.pdf released_paper/
       - name: Deploy pages
