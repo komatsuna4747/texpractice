@@ -1,14 +1,13 @@
 # This is a basic workflow to help you get started with Actions
-name: Build LaTeX document
+name: Release a paper
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the main branch.
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main ]
     
 jobs:
   build_latex:
-    if: ${{ github.event.pull_request.merged == true }} || ${{ startsWith( github.event.pull_request.head.ref, 'release' )}}
     runs-on: ubuntu-latest
     steps:
       - name: Set up Git repository
@@ -23,14 +22,7 @@ jobs:
           path: main.pdf
       - name: Copy PDF document
         run: mkdir released_paper && cp *.pdf released_paper/
-      - name: Deploy pages
-        if: ${{ github.event.pull_request.base.ref == 'develop'}}
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./released_paper
       - name: Commit changed files
-        if: ${{ startsWith( github.event.pull_request.head.ref, 'release' )}}
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Release a paper
