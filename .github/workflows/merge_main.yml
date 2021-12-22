@@ -1,0 +1,32 @@
+# This is a basic workflow to help you get started with Actions
+name: Release a paper
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch.
+  pull_request:
+    branches: [ main ]
+    
+jobs:
+  build_latex:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v2
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@v2
+        with:
+          root_file: main.tex
+      - uses: actions/upload-artifact@v2
+        with:
+          name: PDF
+          path: main.pdf
+      - name: Copy PDF document
+        run: mkdir released_paper && cp *.pdf released_paper/
+      - name: Commit changed files
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Release a paper
+          branch: ${{ github.head_ref }}
+          file_pattern: ./released_paper/main.pdf
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
