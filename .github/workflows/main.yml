@@ -32,7 +32,7 @@ jobs:
           publish_dir: ./released_paper
       - name: Commit changed files
         if: ${{ startsWith( github.event.pull_request.head.ref, 'release' )}}
-        uses: stefanzweifel/git-auto-commit-action@v2.3.0
+        uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Release a paper
           branch: ${{ github.head_ref }}
