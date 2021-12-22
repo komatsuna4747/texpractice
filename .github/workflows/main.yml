@@ -5,12 +5,11 @@ on:
   # Triggers the workflow on push or pull request events but only for the main branch
   pull_request:
     branches: [ main, develop ]
-    types: [ closed ]
     
 jobs:
   build_latex:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true | ${{ startsWith( github.event.pull_request.head.ref, 'release' )}}
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v2
@@ -25,7 +24,7 @@ jobs:
       - name: Copy PDF document
         run: mkdir released_paper && cp *.pdf released_paper/
       - name: Deploy pages
-        if: ${{ github.event.pull_request.base.ref != 'main'}}
+        if: ${{ github.event.pull_request.base.ref == 'develop'}}
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
