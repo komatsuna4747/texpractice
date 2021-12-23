@@ -1,5 +1,5 @@
 # This is a basic workflow to help you get started with Actions
-name: Release a paper
+name: Commit a compiled document
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the main branch.
@@ -21,7 +21,7 @@ jobs:
           name: PDF
           path: main.pdf
       - name: Copy PDF document
-        run: mkdir released_paper && cp *.pdf released_paper/
+        run: mkdir -p released_paper && cp *.pdf released_paper/
       - name: Commit changed files
         uses: stefanzweifel/git-auto-commit-action@v4
         with:

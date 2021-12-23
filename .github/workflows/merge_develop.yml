@@ -8,7 +8,7 @@ on:
     types: [closed]
     
 jobs:
-  build_latex:
+  deploy_paper:
     if: ${{ github.event.pull_request.merged == true }}
     runs-on: ubuntu-latest
     steps:
@@ -22,8 +22,16 @@ jobs:
         with:
           name: PDF
           path: main.pdf
+      - name: Compile LaTeX beamer document
+        uses: xu-cheng/latex-action@v2
+        with:
+          root_file: slide.tex
+      - uses: actions/upload-artifact@v2
+        with:
+          name: PDF
+          path: slide.pdf
       - name: Copy PDF document
-        run: mkdir released_paper && cp *.pdf released_paper/
+        run: mkdir -p released_paper && cp *.pdf released_paper/
       - name: Deploy pages
         uses: peaceiris/actions-gh-pages@v3
         with:
